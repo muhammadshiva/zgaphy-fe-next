@@ -4,8 +4,25 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { getKonfigurasi } from "@/lib/api"
 
 export default function HeroSection() {
+  const [heroImage, setHeroImage] = useState<string>("")
+
+  useEffect(() => {
+    const fetchKonfigurasi = async () => {
+      try {
+        const data = await getKonfigurasi()
+        setHeroImage(data.gambar_hero)
+      } catch (error) {
+        console.error("Error fetching konfigurasi:", error)
+      }
+    }
+
+    fetchKonfigurasi()
+  }, [])
+
   return (
     <section className="pt-24 pb-12 bg-black relative overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -48,7 +65,12 @@ export default function HeroSection() {
             className="relative"
           >
             <div className="relative h-[400px] md:h-[500px] floating">
-              <Image src="https://i.pinimg.com/736x/15/83/2e/15832e7fcec1f37bb655c1d1458b2d6e.jpg" alt="Zgaphy Characters" fill className="object-contain" />
+              <Image 
+                src={heroImage || "https://i.pinimg.com/736x/15/83/2e/15832e7fcec1f37bb655c1d1458b2d6e.jpg"} 
+                alt="Zgaphy Characters" 
+                fill 
+                className="object-contain" 
+              />
             </div>
           </motion.div>
         </div>
